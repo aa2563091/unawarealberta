@@ -1,12 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Unaware Alberta</title>
+    <title>Edmonton Bus Times</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .bus-times {
+            width: 500px;
+            margin: 0 auto;
+        }
+        .bus-times h1 {
+            text-align: center;
+        }
+        .bus-times ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .bus-times li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+        .bus-times li .route {
+            font-weight: bold;
+        }
+        .bus-times li .destination {
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-
-<h1>Unaware Alberta</h1>
-<p>My first paragraph.</p>
-
+    <div class="bus-times">
+        <h1>Edmonton Bus Times</h1>
+        <ul id="bus-times-list">
+            <!-- Bus times will be dynamically added here -->
+        </ul>
+    </div>
+    <script>
+        // Fetch bus times from Transit55 API
+        fetch('https://api.transit55.ca/edmonton/stop/12')
+        .then(response => response.json())
+        .then(data => {
+            const busTimesList = document.getElementById('bus-times-list');
+            // Loop through bus times data and create list items
+            data.forEach(busTime => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="route">${busTime.RouteNumber}</div>
+                    <div class="destination">${busTime.Destination}</div>
+                    <div class="time">${busTime.ExpectedDeparture}</div>
+                `;
+                busTimesList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error(error));
+    </script>
 </body>
 </html>
+
